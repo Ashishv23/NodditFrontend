@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import { View, FlatList, ActivityIndicator } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { getPostsByCommunityId } from "../services/api";
 import tw from "../tailwind";
-
-interface Post {
-  _id: string;
-  title: string;
-  description: string;
-}
+import PostItem from "../components/PostItem";
+import { Post } from "../index.d";
 
 type RootStackParamList = {
   Home: undefined;
@@ -31,7 +27,11 @@ const CommunityPostsScreen: React.FC<CommunityPostsScreenProps> = ({
   const { communityId } = route.params;
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(false);
 
+   const reloadPosts = () => {
+      setReload((prev) => !prev);
+    };
   useEffect(() => {
     if (!communityId) {
       console.error("Error: communityId is missing!");
@@ -41,7 +41,6 @@ const CommunityPostsScreen: React.FC<CommunityPostsScreenProps> = ({
     const fetchPosts = async () => {
       try {
         console.log("Fetching posts for communityId:", communityId);
-
         const response = await getPostsByCommunityId(communityId);
         console.log("API Response:", response);
 
@@ -58,7 +57,7 @@ const CommunityPostsScreen: React.FC<CommunityPostsScreenProps> = ({
     };
 
     fetchPosts();
-  }, [communityId]);
+  }, [communityId, reload]);
 
   if (loading) {
     return (
@@ -72,13 +71,9 @@ const CommunityPostsScreen: React.FC<CommunityPostsScreenProps> = ({
     <View style={tw`flex-1 p-4`}>
       <FlatList
         data={posts}
+        key={communityId}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View style={tw`bg-white p-4 mb-3 rounded-lg shadow-md`}>
-            <Text style={tw`text-lg font-bold`}>{item.title}</Text>
-            <Text style={tw`text-gray-600 mt-2`}>{item.description}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => PostItem({ post: item, reloadPosts })}
       />
     </View>
   );

@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { getPostById, getCommentsByPostId } from "../services/api";
 import CommentItem from "../components/CommentItem";
 import tw from "../tailwind";

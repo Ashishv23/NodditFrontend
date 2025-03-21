@@ -12,12 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
 import tw from "../tailwind";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"; // Import Profile Icon
-
-interface Community {
-  _id: string;
-  name: string;
-  description: string;
-}
+import { Community } from "../index.d";
 
 // Define the navigation parameter list
 type RootStackParamList = {

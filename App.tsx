@@ -1,6 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { TouchableOpacity, Text } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import UserScreen from "./screens/UserScreen";
 import LoginScreen from "./screens/LoginScreen";
@@ -36,7 +37,17 @@ const App: React.FC = () => {
         <Stack.Screen
           name="CommunityPosts"
           component={CommunityPostsScreen}
-          options={{ title: "Community Posts" }}
+          options={{
+            title: "Community Posts",
+            // headerRight: () => (
+            //   <TouchableOpacity
+            //     onPress={() => navigation.navigate("CreatePost")}
+            //     style={tw`mr-4`}
+            //   >
+            //     <Text style={tw`text-blue-500`}>Create Post</Text>
+            //   </TouchableOpacity>
+            // ),
+          }}
         />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
