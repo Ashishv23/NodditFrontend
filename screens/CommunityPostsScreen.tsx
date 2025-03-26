@@ -9,7 +9,7 @@ import { Post } from "../index.d";
 type RootStackParamList = {
   Home: undefined;
   Post: { postId: string };
-  CreatePost: undefined;
+  CreatePost: { communityId: string };
   User: { userId: string };
   CommunityPosts: { communityId: string };
   Login: undefined;
@@ -29,9 +29,9 @@ const CommunityPostsScreen: React.FC<CommunityPostsScreenProps> = ({
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(false);
 
-   const reloadPosts = () => {
-      setReload((prev) => !prev);
-    };
+  const reloadPosts = () => {
+    setReload((prev) => !prev);
+  };
   useEffect(() => {
     if (!communityId) {
       console.error("Error: communityId is missing!");

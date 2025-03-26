@@ -9,11 +9,12 @@ import RegisterScreen from "./screens/RegisterScreen";
 import CreatePostScreen from "./screens/CreatePostScreen";
 import PostScreen from "./screens/PostScreen";
 import CommunityPostsScreen from "./screens/CommunityPostsScreen";
+import tw from "twrnc";
 
 type RootStackParamList = {
   Home: undefined;
   Post: { postId: number };
-  CreatePost: undefined;
+  CreatePost: { communityId: string };
   User: { userId: string };
   CommunityPosts: { communityId: string };
   Login: undefined;
@@ -37,18 +38,25 @@ const App: React.FC = () => {
         <Stack.Screen
           name="CommunityPosts"
           component={CommunityPostsScreen}
-          options={{
+          options={({ navigation, route }) => ({
             title: "Community Posts",
-            // headerRight: () => (
-            //   <TouchableOpacity
-            //     onPress={() => navigation.navigate("CreatePost")}
-            //     style={tw`mr-4`}
-            //   >
-            //     <Text style={tw`text-blue-500`}>Create Post</Text>
-            //   </TouchableOpacity>
-            // ),
-          }}
+            headerRight: () => {
+              const { communityId } = route.params; 
+
+              return (
+                <TouchableOpacity
+                  onPress={
+                    () => navigation.navigate("CreatePost", { communityId }) 
+                  }
+                  style={tw`mr-4`}
+                >
+                  <Text style={tw`text-blue-500`}>Create Post</Text>
+                </TouchableOpacity>
+              );
+            },
+          })}
         />
+
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
       </Stack.Navigator>
