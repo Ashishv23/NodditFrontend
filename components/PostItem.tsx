@@ -19,7 +19,7 @@ type RootStackParamList = {
 
 const PostItem = ({ post, reloadPosts }: { post: Post; reloadPosts: any }) => {
   const url = post.mediaURLs[0];
-  const isYouTube = url.includes("youtube.com") || url.includes("youtu.be");
+  const isYouTube = url?.includes("youtube.com") || url?.includes("youtu.be");
 
   // State for upvotes and downvotes
   const upvotes = post.upvotes;
