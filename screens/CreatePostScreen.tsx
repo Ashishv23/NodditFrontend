@@ -13,6 +13,7 @@ import { createPost } from "../services/api";
 import tw from "../tailwind";
 import { StackScreenProps } from "@react-navigation/stack";
 import * as ImagePicker from "expo-image-picker";
+import { uploadFile } from "@uploadcare/upload-client";
 
 // Define RootStackParamList properly
 type RootStackParamList = {
@@ -56,29 +57,38 @@ const CreatePostScreen: React.FC<CreatePostScreenProps> = ({
   };
 
   const uploadMedia = async () => {
-    if (!media) return null;
+    if (!media || !media.uri) return null;
+
     setIsUploading(true);
+
     try {
-      const formData = new FormData();
-      formData.append("file", {
+      // Create an object that matches the required API format
+      const fileAsset = {
         uri: media.uri,
-        type: media.type || "image/jpeg",
-        name: media.fileName || "upload.jpg",
+        type: media.mimeType || "image/jpeg", // Ensure the correct file type
+        name: media.fileName || media.uri.split("/").pop(), // Extract file name if needed
+      };
+
+      // Upload using the API
+      const response = await uploadFile(fileAsset, {
+        publicKey: "2e7491c59facf6691014",
+        fileName: fileAsset.name,
       });
 
-      const response = await fetch("https://your-api-endpoint.com/upload", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      const data = await response.json();
-      setMediaURL(data.url);
-      return data.url;
+      if (response && response.cdnUrl) {
+        setMediaURL(response.cdnUrl);
+        console.log("Uploaded media URL:", response.cdnUrl);
+        return response.cdnUrl;
+      } else {
+        throw new Error("Failed to retrieve uploaded media URL");
+      }
     } catch (error) {
-      console.error("Error uploading media:", error);
+      // Type guard to check if error is an instance of Error
+      if (error instanceof Error) {
+        console.error("Error uploading media:", error.message);
+      } else {
+        console.error("Error uploading media:", error);
+      }
       return null;
     } finally {
       setIsUploading(false);
@@ -89,13 +99,13 @@ const CreatePostScreen: React.FC<CreatePostScreenProps> = ({
     try {
       let finalMediaURL = mediaURL;
       if (media && !mediaURL) {
-        finalMediaURL = await uploadMedia();
+        finalMediaURL = (await uploadMedia()) || "";
       }
 
       await createPost({
         title,
         description,
-        mediaURL: finalMediaURL,
+        mediaURLs: [finalMediaURL],
         community: communityId, // ✅ Now it correctly uses communityId
       });
 
