@@ -61,12 +61,12 @@ export interface Comment {
   parent: string;
   creator: {
     _id: string;
+    username: string;
     about: string;
     createdAt: string;
     karma: number;
     role: string;
     subscribedCommunities: string[];
-    username: string;
   };
   createdAt: string;
   upvotes: number;

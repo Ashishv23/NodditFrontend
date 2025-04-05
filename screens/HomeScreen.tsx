@@ -36,7 +36,7 @@ const HomeScreen: React.FC = () => {
     const fetchCommunities = async () => {
       try {
         const response = await getCommunities();
-        console.log("API Response:", response);
+        // console.log("API Response:", response);
 
         if (response.data && response.data.documents) {
           setCommunities(response.data.documents);

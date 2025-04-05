@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_BASE_URL = "https://2989-135-0-96-34.ngrok-free.app"; // Adjust the base URL as needed
+const API_BASE_URL = "http://ec2-3-142-54-163.us-east-2.compute.amazonaws.com/"; // Adjust the base URL as needed
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -73,13 +73,13 @@ export const createPost = async (post) => {
 
 export const getPostsByCommunityId = async (communityId) => {
   try {
-    console.log("API Request: Fetching posts for Community ID:", communityId);
+    // console.log("API Request: Fetching posts for Community ID:", communityId);
 
     const response = await api.get("/api/v1/posts/", {
       params: { community: communityId },
     });
 
-    console.log("API Response:", response.data);
+    // console.log("API Response:", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -123,9 +123,11 @@ export const getCommunities = async () => {
 };
 
 // Comments
+// Fetch comments for a specific post
 export const getCommentsByPostId = async (postId) => {
   try {
-    const response = await api.get(`/api/v1/posts/${postId}/comments`);
+    const response = await api.get(`/api/v1/comments/?parent=${postId}`);
+    // console.log("Comments for post with id", postId, ":", response.data);
     return response.data;
   } catch (error) {
     console.error(`Error fetching comments for post with id ${postId}:`, error);
@@ -133,15 +135,15 @@ export const getCommentsByPostId = async (postId) => {
   }
 };
 
-export const addCommentToPost = async (postId, comment) => {
+export const addCommentToPost = async (comment) => {
   try {
-    const response = await api.post(
-      `/api/v1/posts/${postId}/comments`,
-      comment
-    );
+    const response = await api.post(`/api/v1/comments/`, comment);
     return response.data;
   } catch (error) {
-    console.error(`Error adding comment to post with id ${postId}:`, error);
+    console.error(
+      `Error adding comment to post with id ${comment.parent}:`,
+      error
+    );
     throw error;
   }
 };
@@ -243,7 +245,7 @@ export const loginUser = async (credentials) => {
       );
       await AsyncStorage.setItem("authToken", response.data.token);
       await AsyncStorage.setItem("userId", userId); // ✅ Always store as string
-      console.log("Stored userId:", userId);
+      // console.log("Stored userId:", userId);
     }
 
     return response.data;

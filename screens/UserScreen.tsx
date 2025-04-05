@@ -49,7 +49,7 @@ const UserScreen: React.FC<UserScreenProps> = ({ navigation }) => {
           ]);
         } else {
           setUserId(storedUserId);
-          console.log("Fetched userId:", storedUserId);
+          // console.log("Fetched userId:", storedUserId);
         }
       } catch (error) {
         console.error("Error fetching userId:", error);
@@ -65,11 +65,11 @@ const UserScreen: React.FC<UserScreenProps> = ({ navigation }) => {
 
     const fetchUser = async () => {
       try {
-        console.log("Fetching user with ID:", userId);
+        // console.log("Fetching user with ID:", userId);
         const response = await getUserById(userId);
 
         if (response?.data?.user) {
-          console.log("User data received:", response.data.user);
+          // console.log("User data received:", response.data.user);
           setUser(response.data.user);
         } else {
           console.error("Invalid user data format", response);

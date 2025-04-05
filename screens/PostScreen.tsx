@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import { getPostById, getCommentsByPostId } from "../services/api";
 import CommentItem from "../components/CommentItem";
 import tw from "../tailwind";
@@ -62,7 +57,7 @@ const PostScreen: React.FC<PostScreenProps> = ({ route }) => {
         if (commentsResponse?.data) {
           const formattedComments = commentsResponse.data.map(
             (comment: any) => ({
-              id: comment._id, // Convert '_id' to 'id'
+              id: comment._id,
               body: comment.body,
             })
           );

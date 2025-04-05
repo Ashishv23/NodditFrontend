@@ -77,7 +77,7 @@ const CreatePostScreen: React.FC<CreatePostScreenProps> = ({
 
       if (response && response.cdnUrl) {
         setMediaURL(response.cdnUrl);
-        console.log("Uploaded media URL:", response.cdnUrl);
+        // console.log("Uploaded media URL:", response.cdnUrl);
         return response.cdnUrl;
       } else {
         throw new Error("Failed to retrieve uploaded media URL");
@@ -106,7 +106,7 @@ const CreatePostScreen: React.FC<CreatePostScreenProps> = ({
         title,
         description,
         mediaURLs: [finalMediaURL],
-        community: communityId, // ✅ Now it correctly uses communityId
+        community: communityId,
       });
 
       navigation.goBack();
